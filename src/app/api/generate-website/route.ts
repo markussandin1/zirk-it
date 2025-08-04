@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { pages, utils } from '@/lib/database'
+import { contentGenerator } from '@/lib/ai/content-generator'
 import { PageContent } from '@/types/database'
 
 interface FormData {
@@ -24,31 +25,17 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Generate website content (for now, manual generation - AI in next iteration)
-    const content: PageContent = {
-      hero: {
-        title: formData.businessName,
-        subtitle: `Welcome to ${formData.businessName} - ${getIndustryTagline(formData.industry)}`,
-        cta_text: 'Get in Touch'
-      },
-      about: {
-        title: `About ${formData.businessName}`,
-        description: formData.description
-      },
-      services: {
-        title: 'Our Services',
-        items: formData.services.filter(s => s.trim()).map(service => ({
-          name: service.trim(),
-          description: `Professional ${service.toLowerCase()} services tailored to your needs.`
-        }))
-      },
-      contact: {
-        title: 'Contact Us',
-        email: formData.contactEmail,
-        phone: formData.contactPhone,
-        address: formData.contactAddress
-      }
-    }
+    // Generate website content using AI
+    console.log('Generating AI content for:', formData.businessName)
+    const content: PageContent = await contentGenerator.generateWebsiteContent({
+      businessName: formData.businessName,
+      industry: formData.industry,
+      description: formData.description,
+      services: formData.services.filter(s => s.trim()),
+      contactEmail: formData.contactEmail,
+      contactPhone: formData.contactPhone,
+      contactAddress: formData.contactAddress
+    })
 
     // Generate unique slug
     const slug = utils.generateSlug(formData.businessName)
