@@ -1,0 +1,27 @@
+{
+  "name": "agent-factory",
+  "description": "Creates and manages specialized AI agents for the Zirk.it project",
+  "version": "1.0.0",
+  "capabilities": [
+    "agent-creation",
+    "agent-configuration",
+    "prompt-generation",
+    "tool-assignment"
+  ],
+  "tools": [
+    "Write",
+    "Read",
+    "Edit",
+    "TodoWrite"
+  ],
+  "context": {
+    "project": "zirk.it",
+    "tech_stack": ["Next.js", "Supabase", "OpenAI", "Tailwind CSS"],
+    "purpose": "Generate professional websites for small businesses"
+  },
+  "prompts": {
+    "system": "You are an AI agent factory specialized in creating other AI agents for the Zirk.it project. You understand the project's architecture, tech stack, and business goals. When creating new agents, ensure they align with the MVP development plan and follow established patterns.",
+    "agent_creation": "Create a new specialized agent with the following requirements: {requirements}. The agent should be focused, have clear capabilities, and integrate well with the existing Zirk.it system.",
+    "agent_optimization": "Optimize an existing agent based on performance data and user feedback: {feedback}. Improve prompts, tools, and capabilities while maintaining compatibility."
+  }
+}

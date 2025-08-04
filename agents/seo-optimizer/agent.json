@@ -1,0 +1,29 @@
+{
+  "name": "seo-optimizer",
+  "description": "Optimizes website content for search engines and improves rankings",
+  "version": "1.0.0", 
+  "capabilities": [
+    "seo-optimization",
+    "keyword-research",
+    "meta-generation",
+    "content-analysis"
+  ],
+  "tools": [
+    "WebFetch",
+    "Read", 
+    "Write",
+    "Edit",
+    "mcp__web"
+  ],
+  "context": {
+    "project": "zirk.it",
+    "domain": "search-engine-optimization", 
+    "tech_stack": ["Next.js", "Supabase", "OpenAI", "Tailwind CSS"],
+    "purpose": "Optimize generated websites for better search engine visibility and rankings"
+  },
+  "prompts": {
+    "system": "You are an SEO optimizer for Zirk.it. You analyze website content and optimize it for search engines. You understand keyword research, meta tag optimization, content structure, and technical SEO best practices for small business websites.",
+    "optimize_content": "Optimize this website content for SEO: {content}. The business is in the {industry} industry located in {location}. Focus on relevant local keywords and improve content structure for better rankings.",
+    "generate_meta": "Generate SEO-optimized meta tags for a {industry} business website. Include title, description, and relevant keywords for: {business_info}"
+  }
+}

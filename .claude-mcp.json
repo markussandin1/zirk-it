@@ -1,0 +1,79 @@
+{
+  "name": "zirk.it MCP Configuration",
+  "version": "1.0.0",
+  "servers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-supabase"],
+      "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
+        "SUPABASE_SERVICE_ROLE_KEY": "${SUPABASE_SERVICE_ROLE_KEY}"
+      },
+      "description": "Supabase database operations and management"
+    },
+    "github": {
+      "command": "npx", 
+      "args": ["@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub repository operations"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/Users/marsan/Kod-projekt/zirk.it"],
+      "description": "Enhanced file system operations for the project"
+    },
+    "web": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-web"],
+      "description": "Web scraping and content fetching"
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-sqlite"],
+      "env": {
+        "SQLITE_DB_PATH": "./data/zirk.db"
+      },
+      "description": "Local SQLite database for development and caching"
+    }
+  },
+  "tools": {
+    "supabase": [
+      "supabase_query",
+      "supabase_insert", 
+      "supabase_update",
+      "supabase_delete",
+      "supabase_schema"
+    ],
+    "github": [
+      "github_create_repo",
+      "github_push",
+      "github_create_issue",
+      "github_create_pr"
+    ],
+    "filesystem": [
+      "read_file",
+      "write_file",
+      "list_directory",
+      "create_directory"
+    ],
+    "web": [
+      "fetch_url",
+      "scrape_page",
+      "extract_content"
+    ],
+    "sqlite": [
+      "sqlite_query",
+      "sqlite_execute",
+      "sqlite_schema"
+    ]
+  },
+  "agent_mappings": {
+    "supabase-manager": ["supabase", "sqlite"],
+    "facebook-scraper": ["web", "filesystem"],
+    "website-generator": ["supabase", "filesystem"],
+    "seo-optimizer": ["web", "supabase"],
+    "deployment-manager": ["github", "filesystem"]
+  }
+}

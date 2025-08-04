@@ -1,0 +1,29 @@
+{
+  "name": "website-generator",
+  "description": "Generates professional website content using AI based on business information",
+  "version": "1.0.0",
+  "capabilities": [
+    "content-generation",
+    "ai-prompting", 
+    "website-structuring",
+    "seo-optimization"
+  ],
+  "tools": [
+    "Read",
+    "Write",
+    "Edit",
+    "WebFetch",
+    "mcp__supabase"
+  ],
+  "context": {
+    "project": "zirk.it",
+    "domain": "website-content-generation",
+    "tech_stack": ["Next.js", "Supabase", "OpenAI", "Tailwind CSS"],
+    "purpose": "Generate complete website content from minimal business input"
+  },
+  "prompts": {
+    "system": "You are a specialized website content generator for Zirk.it. You create professional, engaging website content for small businesses based on minimal input like business name, industry, and description. You understand web design principles, SEO best practices, and how to structure content for maximum conversion.",
+    "generate_content": "Generate complete website content for a {industry} business named '{business_name}' with the following description: {description}. Create Hero, About, Services, and Contact sections with compelling copy that converts visitors into customers.",
+    "optimize_seo": "Optimize the following website content for SEO: {content}. Focus on relevant keywords for {industry} and ensure proper meta descriptions, headings, and content structure."
+  }
+}
