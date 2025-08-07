@@ -5,12 +5,35 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { currentStepAtom, totalStepsAtom, formDataAtom, generationProgressAtom, generatedWebsiteAtom } from '@/store/generationStore';
+import { useEffect, useState } from 'react';
 
 export function GenerationWizard() {
   const [currentStep, setCurrentStep] = useAtom(currentStepAtom);
   const [totalSteps] = useAtom(totalStepsAtom);
   const [formData, setFormData] = useAtom(formDataAtom);
-  const [progress] = useAtom(generationProgressAtom);
+  const [progress, setProgress] = useAtom(generationProgressAtom);
+  const [jobId, setJobId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!jobId) return;
+
+    const interval = setInterval(async () => {
+      const response = await fetch(`/api/generation-status/${jobId}`);
+      const data = await response.json();
+
+      setProgress(data.progress || 0);
+
+      if (data.status === 'completed') {
+        // Hantera slutförd generering
+        clearInterval(interval);
+      } else if (data.status === 'error') {
+        // Hantera fel
+        clearInterval(interval);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [jobId, setProgress]);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -24,9 +47,16 @@ export function GenerationWizard() {
     }
   };
 
-  const handleGenerate = () => {
-    // Detta kommer att anropa API:et i en framtida iteration
-    console.log('Generating website with data:', formData);
+  const handleGenerate = async () => {
+    const response = await fetch('/api/generate-website', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (data.success) {
+      setJobId(data.jobId);
+    }
   };
 
   return (
@@ -34,7 +64,7 @@ export function GenerationWizard() {
       <CardHeader>
         <CardTitle>Skapa din hemsida</CardTitle>
         <CardDescription>Steg {currentStep} av {totalSteps}</CardDescription>
-        <Progress value={(currentStep / totalSteps) * 100} className="mt-2" />
+        <Progress value={progress} className="mt-2" />
       </CardHeader>
       <CardContent>
         {currentStep === 1 && <div>Steg 1: Välj bransch</div>}
@@ -48,7 +78,9 @@ export function GenerationWizard() {
         {currentStep < totalSteps ? (
           <Button onClick={handleNext}>Nästa</Button>
         ) : (
-          <Button onClick={handleGenerate}>Generera hemsida</Button>
+          <Button onClick={handleGenerate} disabled={!!jobId}>
+            {jobId ? 'Genererar...' : 'Generera hemsida'}
+          </Button>
         )}
       </CardFooter>
     </Card>
