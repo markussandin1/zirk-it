@@ -1,4 +1,4 @@
-import WebsiteForm from '@/components/WebsiteForm'
+import { GenerationWizard } from '@/components/GenerationWizard';
 import HomeMethodSelector from '@/components/HomeMethodSelector'
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
         </div>
         
         <div id="form-section">
-          <WebsiteForm />
+          <GenerationWizard />
         </div>
       </div>
     </main>
