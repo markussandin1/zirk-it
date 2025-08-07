@@ -73,7 +73,7 @@ export async function GET() {
         retrieve: 'OK'
       },
       data: {
-        totalPages: connectionTest?.count || 0,
+        totalPages: connectionTest?.[0]?.count || 0,
         testPage: {
           id: createdPage.id,
           slug: createdPage.slug,

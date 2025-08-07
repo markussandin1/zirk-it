@@ -104,6 +104,7 @@ export interface PageContent {
     title: string
     subtitle: string
     cta_text?: string
+    image?: string
   }
   about: {
     title: string
@@ -115,6 +116,7 @@ export interface PageContent {
       name: string
       description: string
       price?: string
+      icon?: string
     }>
   }
   contact: {
@@ -123,5 +125,42 @@ export interface PageContent {
     phone?: string
     address?: string
     hours?: string
+  }
+  branding?: {
+    logo?: string
+  }
+  // Design system from Creative Director Agent
+  designTokens?: {
+    colorPalette: {
+      primary: string
+      secondary: string
+      accent: string
+      neutral: {
+        light: string
+        medium: string
+        dark: string
+      }
+    }
+    typography: {
+      headingFont: string
+      bodyFont: string
+      fontScale: {
+        hero: string
+        heading: string
+        body: string
+        small: string
+      }
+    }
+    layoutStyle: string
+    components: {
+      cardStyle: string
+      buttonStyle: string
+      shadowIntensity: string
+    }
+    spacing: {
+      sectionPadding: string
+      cardPadding: string
+      elementGap: string
+    }
   }
 }

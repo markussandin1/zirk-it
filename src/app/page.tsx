@@ -1,4 +1,5 @@
 import WebsiteForm from '@/components/WebsiteForm'
+import HomeMethodSelector from '@/components/HomeMethodSelector'
 
 export default function Home() {
   return (
@@ -11,13 +12,17 @@ export default function Home() {
           <p className="text-2xl text-gray-600 mb-4">
             Your business. Connected.
           </p>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto mb-6">
             Create a professional website for your business in 2 minutes. 
-            Just tell us about your business and we'll build you a beautiful site.
+            Just tell us about your business and we&apos;ll build you a beautiful site.
           </p>
+          
+          <HomeMethodSelector />
         </div>
         
-        <WebsiteForm />
+        <div id="form-section">
+          <WebsiteForm />
+        </div>
       </div>
     </main>
   );

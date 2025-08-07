@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import ImageUpload from './ImageUpload'
 
 interface FormData {
   businessName: string
@@ -11,6 +12,8 @@ interface FormData {
   contactEmail: string
   contactPhone: string
   contactAddress: string
+  heroImage?: string
+  logoImage?: string
 }
 
 export default function WebsiteForm() {
@@ -23,7 +26,9 @@ export default function WebsiteForm() {
     services: [''],
     contactEmail: '',
     contactPhone: '',
-    contactAddress: ''
+    contactAddress: '',
+    heroImage: undefined,
+    logoImage: undefined
   })
 
   const handleInputChange = (field: keyof FormData, value: string) => {
@@ -138,6 +143,7 @@ export default function WebsiteForm() {
               <option value="education">Education & Training</option>
               <option value="automotive">Automotive</option>
               <option value="home">Home & Garden</option>
+              <option value="crafts">Crafts & Trades (snickare, elektriker, målare)</option>
               <option value="technology">Technology</option>
               <option value="other">Other</option>
             </select>
@@ -192,6 +198,31 @@ export default function WebsiteForm() {
             >
               + Add another service
             </button>
+          </div>
+
+          {/* Images */}
+          <div className="border-t pt-6">
+            <h3 className="text-lg font-medium text-gray-800 mb-4">Images (Optional)</h3>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ImageUpload
+                type="hero"
+                label="Hero Image"
+                description="A main image for your website header. Will be used as background or featured image."
+                currentImage={formData.heroImage}
+                onUpload={(url) => handleInputChange('heroImage', url)}
+                onRemove={() => handleInputChange('heroImage', '')}
+              />
+              
+              <ImageUpload
+                type="logo"
+                label="Logo"
+                description="Your business logo. Will be displayed in the header and used for branding."
+                currentImage={formData.logoImage}
+                onUpload={(url) => handleInputChange('logoImage', url)}
+                onRemove={() => handleInputChange('logoImage', '')}
+              />
+            </div>
           </div>
 
           {/* Contact Information */}
