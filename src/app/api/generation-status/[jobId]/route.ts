@@ -1,12 +1,18 @@
 // src/app/api/generation-status/[jobId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { jobs } from '@/lib/job-store';
+import { supabase } from '@/lib/database';
 
 export async function GET(request: NextRequest, { params }: { params: { jobId: string } }) {
   const { jobId } = params;
-  const job = jobs[jobId];
+  
+  const { data: job, error } = await supabase
+    .from('jobs')
+    .select('*')
+    .eq('id', jobId)
+    .single();
 
-  if (!job) {
+  if (error || !job) {
+    console.error('Error fetching job status:', error);
     return NextResponse.json({ error: 'Job not found' }, { status: 404 });
   }
 
