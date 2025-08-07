@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { currentStepAtom, totalStepsAtom, formDataAtom, generationProgressAtom, generatedWebsiteAtom } from '@/store/generationStore';
 import { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
 
 export function GenerationWizard() {
   const [currentStep, setCurrentStep] = useAtom(currentStepAtom);
@@ -17,6 +18,7 @@ export function GenerationWizard() {
   const [formData, setFormData] = useAtom(formDataAtom);
   const [progress, setProgress] = useAtom(generationProgressAtom);
   const [jobId, setJobId] = useState<string | null>(null);
+  const [currentService, setCurrentService] = useState('');
 
   useEffect(() => {
     if (!jobId) return;
@@ -63,6 +65,19 @@ export function GenerationWizard() {
     }
   };
 
+  const addService = () => {
+    if (currentService.trim()) {
+      setFormData({ ...formData, services: [...formData.services, currentService.trim()] });
+      setCurrentService('');
+    }
+  };
+
+  const removeService = (index: number) => {
+    const newServices = [...formData.services];
+    newServices.splice(index, 1);
+    setFormData({ ...formData, services: newServices });
+  };
+
   return (
     <Card className="w-[450px]">
       <CardHeader>
@@ -100,6 +115,25 @@ export function GenerationWizard() {
           </div>
         )}
         {currentStep === 4 && (
+          <div className="space-y-2">
+            <Label htmlFor="services">Vilka tjänster/produkter erbjuder ni?</Label>
+            <div className="flex space-x-2">
+              <Input id="services" placeholder="T.ex. Klippning" value={currentService} onChange={(e) => setCurrentService(e.target.value)} />
+              <Button onClick={addService}>Lägg till</Button>
+            </div>
+            <div className="space-y-2 pt-2">
+              {formData.services.map((service, index) => (
+                <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded-md">
+                  <span>{service}</span>
+                  <Button variant="ghost" size="icon" onClick={() => removeService(index)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {currentStep === 5 && (
           <div>
             <p>Klicka på &quot;Generera hemsida&quot; för att skapa din sida.</p>
           </div>
@@ -110,7 +144,9 @@ export function GenerationWizard() {
           Tillbaka
         </Button>
         {currentStep < totalSteps ? (
-          <Button onClick={handleNext}>Nästa</Button>
+          <Button onClick={handleNext} disabled={currentStep === 4 && formData.services.length === 0}>
+            Nästa
+          </Button>
         ) : (
           <Button onClick={handleGenerate} disabled={!!jobId}>
             {jobId ? 'Genererar...' : 'Generera hemsida'}

@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 
 // Atomer för att hantera state i genererings-wizarden
 export const currentStepAtom = atom(1);
-export const totalStepsAtom = atom(4); // Increased to 4 steps
+export const totalStepsAtom = atom(5); // Increased to 5 steps
 
 export const formDataAtom = atom({
   businessName: '',
