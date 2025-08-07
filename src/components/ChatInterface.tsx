@@ -282,32 +282,51 @@ export default function ChatInterface() {
 
       const result = await response.json()
 
-      if (result.success) {
-        addMessage(
-          `🎉 Din hemsida är klar!`,
-          'bot',
-          { 
-            step: 'completed',
-            websiteUrl: `/s/${result.slug}`,
-            websiteSlug: result.slug
+      if (result.success && result.jobId) {
+        // Start polling for the result
+        const pollInterval = setInterval(async () => {
+          try {
+            const statusResponse = await fetch(`/api/generation-status/${result.jobId}`);
+            const statusResult = await statusResponse.json();
+
+            if (statusResult.status === 'completed') {
+              clearInterval(pollInterval);
+              setIsGenerating(false);
+              addMessage(
+                `🎉 Din hemsida är klar!`,
+                'bot',
+                { 
+                  step: 'completed',
+                  websiteUrl: `/s/${statusResult.result.slug}`,
+                  websiteSlug: statusResult.result.slug
+                }
+              )
+              setTimeout(() => {
+                router.push(`/s/${statusResult.result.slug}`)
+              }, 5000)
+            } else if (statusResult.status === 'error') {
+              clearInterval(pollInterval);
+              setIsGenerating(false);
+              addMessage('Något gick fel när jag skapade hemsidan. Ska vi försöka igen?', 'bot')
+            }
+          } catch (pollError) {
+            clearInterval(pollInterval);
+            setIsGenerating(false);
+            console.error('Polling error:', pollError);
+            addMessage('Det uppstod ett tekniskt problem. Försök igen.', 'bot')
           }
-        )
-        
-        // Auto-redirect after 5 seconds (longer to let them see the message)
-        setTimeout(() => {
-          router.push(`/s/${result.slug}`)
-        }, 5000)
+        }, 2000);
       } else {
         console.error('Website generation failed:', result)
         const errorMsg = result.error === 'Missing required fields' 
           ? 'Jag saknar viktig information. Låt oss börja om från början.'
           : 'Något gick fel när jag skapade hemsidan. Ska vi försöka igen?'
         addMessage(errorMsg, 'bot')
+        setIsGenerating(false)
       }
     } catch (error) {
       console.error('Website generation error:', error)
       addMessage('Det uppstod ett tekniskt problem. Försök igen.', 'bot')
-    } finally {
       setIsGenerating(false)
     }
   }
