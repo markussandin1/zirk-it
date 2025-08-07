@@ -11,8 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { currentStepAtom, totalStepsAtom, formDataAtom, generationProgressAtom, generatedWebsiteAtom } from '@/store/generationStore';
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function GenerationWizard() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useAtom(currentStepAtom);
   const [totalSteps] = useAtom(totalStepsAtom);
   const [formData, setFormData] = useAtom(formDataAtom);
@@ -25,21 +27,24 @@ export function GenerationWizard() {
 
     const interval = setInterval(async () => {
       const response = await fetch(`/api/generation-status/${jobId}`);
-      const data = await response.json();
+      if (!response.ok) return;
 
+      const data = await response.json();
       setProgress(data.progress || 0);
 
       if (data.status === 'completed') {
-        // Hantera slutförd generering
         clearInterval(interval);
+        if (data.result?.slug) {
+          router.push(`/s/${data.result.slug}`);
+        }
       } else if (data.status === 'error') {
-        // Hantera fel
         clearInterval(interval);
+        // Handle error state in UI
       }
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [jobId, setProgress]);
+  }, [jobId, setProgress, router]);
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -60,7 +65,7 @@ export function GenerationWizard() {
       body: JSON.stringify(formData),
     });
     const data = await response.json();
-    if (data.success) {
+    if (data.success && data.jobId) {
       setJobId(data.jobId);
     }
   };
