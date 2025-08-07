@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { currentStepAtom, totalStepsAtom, formDataAtom, generationProgressAtom, generatedWebsiteAtom } from '@/store/generationStore';
 import { useEffect, useState } from 'react';
 
@@ -72,17 +73,33 @@ export function GenerationWizard() {
       <CardContent className="space-y-4">
         {currentStep === 1 && (
           <div className="space-y-2">
-            <Label htmlFor="companyName">Företagsnamn</Label>
-            <Input id="companyName" placeholder="T.ex. Pizzeria Bella" value={formData.companyName} onChange={(e) => setFormData({ ...formData, companyName: e.target.value })} />
+            <Label htmlFor="businessName">Företagsnamn</Label>
+            <Input id="businessName" placeholder="T.ex. Pizzeria Bella" value={formData.businessName} onChange={(e) => setFormData({ ...formData, businessName: e.target.value })} />
           </div>
         )}
         {currentStep === 2 && (
+          <div className="space-y-2">
+            <Label htmlFor="industry">Bransch</Label>
+            <Select onValueChange={(value) => setFormData({ ...formData, industry: value })} value={formData.industry}>
+              <SelectTrigger id="industry">
+                <SelectValue placeholder="Välj en bransch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="restaurant">Restaurang</SelectItem>
+                <SelectItem value="beauty">Skönhet</SelectItem>
+                <SelectItem value="professional">Tjänster</SelectItem>
+                <SelectItem value="other">Annat</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        {currentStep === 3 && (
           <div className="space-y-2">
             <Label htmlFor="description">Beskriv ditt företag</Label>
             <Textarea id="description" placeholder="Berätta vad ditt företag gör, vilka ni riktar er till, etc." value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} />
           </div>
         )}
-        {currentStep === 3 && (
+        {currentStep === 4 && (
           <div>
             <p>Klicka på &quot;Generera hemsida&quot; för att skapa din sida.</p>
           </div>
