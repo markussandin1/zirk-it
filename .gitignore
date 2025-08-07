@@ -41,3 +41,11 @@ next-env.d.ts
 .temp
 .import
 .seed
+
+# Project-specific
+*.png
+*.jpeg
+*.txt
+*.js
+DESIGN-EVOLUTION-PLAN.md
+/public/uploads/
