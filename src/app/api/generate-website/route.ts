@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { pages, utils, supabase } from '@/lib/database'
+import { pages, utils } from '@/lib/database'
+import { supabase } from '@/lib/supabase' // Corrected import
 import { masterOrchestrator } from '@/lib/ai/agents'
 import { PageContent as DatabasePageContent, Json } from '@/types/database'
 import { v4 as uuidv4 } from 'uuid';

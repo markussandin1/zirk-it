@@ -1,6 +1,6 @@
 // src/app/api/generation-status/[jobId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/database';
+import { supabase } from '@/lib/supabase'; // Corrected import
 
 export async function GET(request: NextRequest, { params }: { params: { jobId: string } }) {
   const { jobId } = params;
