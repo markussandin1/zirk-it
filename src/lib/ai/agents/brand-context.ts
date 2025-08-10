@@ -119,15 +119,45 @@ IMPORTANT: Write ALL responses in ${language}. The user provided their input in 
   private extractJSON(content: string): string {
     const jsonMatch = content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/)
     if (jsonMatch) {
-      return jsonMatch[1].trim()
+      return this.fixJSONSyntax(jsonMatch[1].trim())
     }
     
     const directJsonMatch = content.match(/\{[\s\S]*\}/)
     if (directJsonMatch) {
-      return directJsonMatch[0].trim()
+      return this.fixJSONSyntax(directJsonMatch[0].trim())
     }
     
-    return content.trim()
+    return this.fixJSONSyntax(content.trim())
+  }
+
+  private fixJSONSyntax(jsonString: string): string {
+    // Fix common JSON syntax issues from AI responses
+    try {
+      // First try to parse as-is
+      JSON.parse(jsonString)
+      return jsonString
+    } catch {
+      // Fix missing commas between object properties
+      let fixed = jsonString
+      
+      // Fix missing commas after closing brackets/quotes before opening quotes
+      fixed = fixed.replace(/("\]|\})\s*\n\s*"/g, '$1,\n  "')
+      
+      // Fix missing commas after quoted values before next property
+      fixed = fixed.replace(/"([^"]*)"(\s*\n\s*")/g, '"$1",$2')
+      
+      // Fix missing commas in arrays
+      fixed = fixed.replace(/("\s*)\n(\s*")/g, '$1,\n$2')
+      
+      try {
+        JSON.parse(fixed)
+        return fixed
+      } catch {
+        // If still failing, try more aggressive fixes
+        console.warn('JSON syntax still invalid after fixes, returning original')
+        return jsonString
+      }
+    }
   }
 
   private calculateConfidence(input: GenerationInput, result: BrandContext): number {

@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
-export const dynamic = 'force-dynamic';
-
-export async function GET(request: NextRequest, { params }: { params: { jobId: string } }) {
+export async function GET(request: NextRequest) {
   try {
-    const { jobId } = params;
+    const { searchParams } = new URL(request.url);
+    const jobId = searchParams.get('jobId');
+    
+    if (!jobId) {
+      return NextResponse.json({ error: 'Job ID is required' }, { status: 400 });
+    }
+    
     console.log('Looking for job:', jobId);
     
     const { data: job, error } = await supabaseAdmin

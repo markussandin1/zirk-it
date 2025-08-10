@@ -5,13 +5,13 @@ import DevTools from '@/components/DevTools'
 import { PageContent } from '@/types/database'
 
 interface PageProps {
-  params: Promise<{
+  params: {
     slug: string
-  }>
+  }
 }
 
 export default async function GeneratedSitePage({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
   
   // Fetch page data from database
   const page = await pages.getBySlug(slug)
@@ -36,7 +36,7 @@ export default async function GeneratedSitePage({ params }: PageProps) {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params
+  const { slug } = params
   const page = await pages.getBySlug(slug)
   
   if (!page) {

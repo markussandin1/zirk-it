@@ -5,7 +5,7 @@ import type { Page, PageInsert, Feedback, FeedbackInsert } from '@/types/databas
 export const pages = {
   // Get page by slug
   async getBySlug(slug: string): Promise<Page | null> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pages')
       .select('*')
       .eq('slug', slug)
@@ -21,7 +21,7 @@ export const pages = {
 
   // Create new page
   async create(page: PageInsert): Promise<Page | null> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pages')
       .insert(page)
       .select()
@@ -37,7 +37,7 @@ export const pages = {
 
   // Update page
   async update(id: string, updates: Partial<PageInsert>): Promise<Page | null> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('pages')
       .update(updates)
       .eq('id', id)

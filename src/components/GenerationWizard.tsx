@@ -26,7 +26,7 @@ export function GenerationWizard() {
     if (!jobId) return;
 
     const interval = setInterval(async () => {
-      const response = await fetch(`/api/generation-status/${jobId}`);
+      const response = await fetch(`/api/generation-status-new?jobId=${jobId}`);
       if (!response.ok) return;
 
       const data = await response.json();
@@ -35,7 +35,7 @@ export function GenerationWizard() {
       if (data.status === 'completed') {
         clearInterval(interval);
         if (data.result?.slug) {
-          router.push(`/s/${data.result.slug}`);
+          router.push(`/s?slug=${data.result.slug}`);
         }
       } else if (data.status === 'error') {
         clearInterval(interval);
