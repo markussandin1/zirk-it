@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnpm-debug.log*
+.yarn-integrity
+
+# Production build
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+
+# Development
+.DS_Store
+.vscode/
+.idea/
+
+# Temp and cache
+.cache/
+*.log
+*.tmp
+.temp/
+
+# Playwright test artifacts
+.playwright-mcp/
+playwright-report/
+test-results/
+
+# OS files
+Thumbs.db
+*.swp
+*.swo
+
+# Local development files
+*.local
